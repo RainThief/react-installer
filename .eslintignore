@@ -1,0 +1,4 @@
+node_modules/*
+src/serviceWorker.ts
+src/index.tsx
+.eslintrc.js

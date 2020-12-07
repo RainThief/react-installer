@@ -1,0 +1,56 @@
+# name: React app
+
+
+# on:
+#   push:
+#     branches:
+#       - "*"
+
+
+# env:
+#   CI: true
+#   DOCKER_USER: ${{ github.actor }}
+#   DOCKER_PASS: ${{ secrets.GITHUB_TOKEN }}
+#   DOCKER_REG: docker.pkg.github.com
+#   GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+#   GIT_URL: github.com/rainthief/react-installer.git
+
+
+# jobs:
+#   check:
+#     name: Check and test
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v2
+
+#       - name: Code analysis
+#         run: ./run_static_analysis.sh
+
+#       - name: Dependency audit
+#         run: ./run_audit.sh
+
+#       - name: Unit tests
+#         run: ./run_unit_tests.sh -c
+
+
+#   tag_release:
+#     name: Tag and publish
+#     if: github.ref == 'refs/heads/master'
+#     needs: check
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v2
+#         with:
+#           token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+
+#       - name: Tag release
+#         run: |
+#           if ! git log -1 --pretty=format:"%s" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+"; then
+#             git config user.name $GITHUB_ACTOR
+#             git config user.email gh-actions-${GITHUB_ACTOR}@github.com
+#             yarn version --new-version patch
+#             git push "https://$GITHUB_TOKEN@$GIT_URL"
+#             git push "https://$GITHUB_TOKEN@$GIT_URL" --tags
+#           fi

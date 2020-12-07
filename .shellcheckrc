@@ -1,0 +1,2 @@
+# this will be run in container not local file system
+disable=SC1091,SC1090

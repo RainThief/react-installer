@@ -1,0 +1,12 @@
+{
+    "extends": ["@rainthief/react-lint-config/stylelint.config"],
+    "ignoreFiles": [
+    './coverage/**/*',
+    './build/**/*',
+    './node_modules/**/*',
+    './_node_modules/**/*',
+  ],
+    "plugins": [
+      "stylelint-scss"
+    ],
+}
