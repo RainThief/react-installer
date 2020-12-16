@@ -11,7 +11,7 @@ echo_info "\nRunning Static Analysis"
 ./scripts/static_analysis.sh
 
 echo_info "\nRunning Unit Tests"
-./scripts/unit_tests.sh -c
+./scripts/unit_test.sh -c
 
 echo_info "\nRunning Audit"
 ./scripts/audit.sh

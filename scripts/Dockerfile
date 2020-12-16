@@ -1,6 +1,9 @@
 FROM node:12-alpine as builder
 
-RUN apk add --no-cache curl=7.67.0-r1
+RUN apk add --no-cache \
+    curl=7.67.0-r3 \
+    # git needed for yran install via git
+    git=2.24.3-r0
 
 # install hadolint (Dockerfile linter)
 RUN curl -L "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64"  -o "hadolint" \
@@ -19,8 +22,7 @@ COPY package.json package.json
 
 COPY yarn.lock yarn.lock
 
-# allow 'prepare' script to fail on rollup and install.js
-RUN yarn install; exit 0
+RUN yarn install
 
 
 
