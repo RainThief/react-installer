@@ -16,14 +16,6 @@ RUN curl -L "https://github.com/koalaman/shellcheck/releases/download/v0.7.1/she
   && mv shellcheck-v0.7.1/shellcheck /usr/local/bin/shellcheck \
   && chmod +x /usr/local/bin/shellcheck
 
-WORKDIR /usr/app
-
-COPY package.json package.json
-
-COPY yarn.lock yarn.lock
-
-RUN yarn install
-
 
 
 
@@ -39,16 +31,9 @@ COPY --from=builder /usr/local/bin/hadolint /usr/local/bin/hadolint
 
 COPY --from=builder /usr/local/bin/shellcheck /usr/local/bin/shellcheck
 
-COPY --from=builder /usr/app/node_modules /usr/appcache/node_modules
-
-# allow internal .cache folder to be created by non root user
-RUN chmod 777 /usr/appcache/node_modules
-
 WORKDIR /usr/app
 
 ENV SKIP_PREFLIGHT_CHECK=true
 
 # make yarn cli colourfull
 ENV FORCE_COLOR=1
-
-WORKDIR /usr/app

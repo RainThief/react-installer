@@ -47,7 +47,7 @@ exec_in_container() {
         --network=host \
         "$IMAGE_NAME" /bin/bash
 
-    docker exec $EXEC_OPTS "$CONT_NAME" ln -s /usr/appcache/node_modules node_modules
+    docker exec $EXEC_OPTS "$CONT_NAME" yarn install --frozen-lockfile
 
     docker exec $EXEC_OPTS "$CONT_NAME" "$@"
     EXIT_CODE=$?
@@ -59,18 +59,35 @@ exec_in_container() {
     return $EXIT_CODE
 }
 
+
 # node modules may contain incompaitble binaries accross platforms so ignore host copy
 mv_node_modules() {
     # not going to exist on ci
-    if [ "$CI" == "true" ]; then return; fi
-
-    if [ -d "node_modules" ]; then
-            sleep 2
-            mv "node_modules" "_node_modules"
+    if [ "$CI" == "true" ]; then
+        if [ -d ".git" ]; then
+            # ci git config causes errors and is not required
+            mv ".git" ".git.local"
+        fi
+        return
     fi
-    if [ -L "node_modules" ]; then
-        rm node_modules
-        mv "_node_modules" "node_modules"
+
+    # if node_modules foler exists locally then we need to move it
+    # so it is not used by container
+    if [ -d "node_modules" ]; then
+        # if starting ci run, move local modules
+        if [ -d "node_modules.ci" ]; then
+            mv "node_modules" "node_modules.local"
+            mv "node_modules.ci" "node_modules"
+            return
+        fi
+        # ending ci run, reinstate local modules
+        if [ -d "node_modules.local" ]; then
+            mv "node_modules" "node_modules.ci"
+            mv "node_modules.local" "node_modules"
+            return
+        fi
+        # if ci first run
+        mv "node_modules" "node_modules.local"
     fi
 }
 

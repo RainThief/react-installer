@@ -16,7 +16,7 @@ npx eslint "$ESLINT_OPT" --color ./src -c .eslintrc.js --ext .ts,.tsx,.js,.jsx
 exitonfail $? "Eslint"
 
 echo_info "linting sass"
-npx stylelint --color "**/*.{css,scss,sass}"
+npx stylelint --color --allow-empty-input "**/*.{css,scss,sass}"
 exitonfail $? "Stylelint"
 
 echo_info "linting bash"

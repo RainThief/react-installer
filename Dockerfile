@@ -8,7 +8,7 @@ WORKDIR /app
 # git useful for git+https packages
 RUN apk add --no-cache git=2.24.3-r0
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 RUN chmod 777 node_modules && yarn run build
 
